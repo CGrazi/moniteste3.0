@@ -13,22 +13,18 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
-      screens: {
-        "3xl": "1920px",
-      },
+      screens: { "3xl": "1920px" },
       fontFamily: {
-        serif: ["Cormorant Garamond", "Georgia", "serif"],
-        sans: ["Inter", "system-ui", "sans-serif"],
+        serif: ["Fraunces", "Georgia", "serif"],
+        sans: ["DM Sans", "system-ui", "sans-serif"],
       },
       fontSize: {
-        "display": ["clamp(3rem, 8vw, 7rem)", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
-        "headline": ["clamp(2rem, 5vw, 4rem)", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
-        "subheadline": ["clamp(1.25rem, 2vw, 1.75rem)", { lineHeight: "1.4" }],
+        display: ["clamp(3rem, 8vw, 7rem)", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+        headline: ["clamp(2rem, 5vw, 4rem)", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
+        subheadline: ["clamp(1.25rem, 2vw, 1.75rem)", { lineHeight: "1.4" }],
       },
       colors: {
         border: "hsl(var(--border))",

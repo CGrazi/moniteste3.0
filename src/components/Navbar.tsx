@@ -12,23 +12,18 @@ const Navbar = ({ selectedCategory, onCategoryChange }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const location = useLocation();
-  
+
   const isHomePage = location.pathname === "/";
-  
-  const categories = ["everything", ...getCategories().slice(0, 4)];
+  const categories = ["tudo", ...getCategories()];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains("dark");
-    setIsDark(isDarkMode);
+    setIsDark(document.documentElement.classList.contains("dark"));
   }, []);
 
   const toggleTheme = () => {
@@ -37,49 +32,50 @@ const Navbar = ({ selectedCategory, onCategoryChange }: NavbarProps) => {
     document.documentElement.classList.toggle("dark", newIsDark);
   };
 
+  const categoryButton = (category: string, mobile = false) => (
+    <button
+      key={category}
+      onClick={() => onCategoryChange?.(category)}
+      aria-pressed={selectedCategory === category}
+      className={`${mobile ? "px-4 py-2 whitespace-nowrap" : "px-4 py-1.5"} rounded-full text-sm capitalize transition-all duration-300 ${
+        selectedCategory === category
+          ? "bg-primary text-primary-foreground"
+          : mobile
+            ? "bg-muted text-muted-foreground"
+            : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      {category}
+    </button>
+  );
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? "bg-background/95 backdrop-blur-sm"
-            : "bg-transparent"
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+          isScrolled ? "bg-background/95 backdrop-blur-sm" : "bg-transparent"
         }`}
       >
         <div className="px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+          <div className="flex h-16 items-center justify-between">
             <Link
               to="/"
-              className="text-lg font-medium tracking-tight hover:opacity-70 transition-opacity duration-300"
+              className="font-serif text-2xl font-semibold tracking-tight transition-opacity duration-300 hover:opacity-70"
+              aria-label="Moniteste — página inicial"
             >
-              Jordan Studio
+              Moniteste
             </Link>
 
-            {/* Center: Category Filters (Desktop only, only on Home page) */}
             {isHomePage && onCategoryChange && (
-              <div className="hidden md:flex items-center gap-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => onCategoryChange(category)}
-                    className={`px-4 py-1.5 text-sm rounded-full transition-all duration-300 ${
-                      selectedCategory === category
-                        ? "bg-foreground text-background"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
+              <div className="hidden items-center gap-1 md:flex">
+                {categories.map((category) => categoryButton(category))}
               </div>
             )}
 
-            {/* Right side: Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 hover:opacity-70 transition-opacity duration-300"
-              aria-label="Toggle theme"
+              className="rounded-full p-2 transition-colors duration-300 hover:bg-muted"
+              aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
@@ -87,24 +83,11 @@ const Navbar = ({ selectedCategory, onCategoryChange }: NavbarProps) => {
         </div>
       </nav>
 
-      {/* Mobile: Scrollable Categories below header (only on Home page) */}
       {isHomePage && onCategoryChange && (
-        <div className="fixed top-16 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm md:hidden">
+        <div className="fixed left-0 right-0 top-16 z-40 bg-background/95 backdrop-blur-sm md:hidden">
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex gap-2 px-6 py-3 w-max">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => onCategoryChange(category)}
-                  className={`px-4 py-2 text-sm rounded-full whitespace-nowrap transition-all duration-300 ${
-                    selectedCategory === category
-                      ? "bg-foreground text-background"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+            <div className="flex w-max gap-2 px-6 py-3">
+              {categories.map((category) => categoryButton(category, true))}
             </div>
           </div>
         </div>
